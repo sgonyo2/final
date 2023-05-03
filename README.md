@@ -11,8 +11,8 @@ Four inputs are required to use this app. First, select a country from the drop-
  
 **Organization**  
 [data_prep](https://github.com/sgonyo2/hw2/blob/main/data_prep.Rmd) prepares the data by retaining, renaming, and cleaning the variables of interest.  
-[dashboard](https://github.com/sgonyo2/final/blob/main/dashboard.Rmd) creates an interactive [shiny app](https://www.shinyapps.io/admin/#/application/9020621) to explore the data.
-[data_subset](https://github.com/sgonyo2/final/blob/main/data_subset.rds) is the processed data.
+[dashboard](https://github.com/sgonyo2/final/blob/main/dashboard.Rmd) creates an interactive [shiny app](https://www.shinyapps.io/admin/#/application/9020621) to explore the data.  
+[data_subset](https://github.com/sgonyo2/final/blob/main/data_subset.rds) is the processed data.  
 [output](https://github.com/sgonyo2/final/tree/main/output) contains examples of the output created by the shiny app.
 
 **Main Findings**  
