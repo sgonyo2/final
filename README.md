@@ -14,6 +14,7 @@ Four inputs are required to use this app. First, select a country from the drop-
 [dashboard](https://github.com/sgonyo2/final/blob/main/dashboard.Rmd) creates an interactive [shiny app](https://www.shinyapps.io/admin/#/application/9020621) to explore the data.  
 [data_subset](https://github.com/sgonyo2/final/blob/main/data_subset.rds) is the processed data.  
 [output](https://github.com/sgonyo2/final/tree/main/output) contains examples of the output created by the shiny app.
+[dynamic_report](https://github.com/sgonyo2/final/blob/main/dynamic_report.html) is an HTML report that includes the information from Shiny.
 
 **Main Findings**  
 Generally speaking, men, older people, and those with lower educations tend to agree more that children suffer when a mother works for pay (Figure 1). Opinions do not appear to change with age for woman as much as for men, and opinions do not appear to change with education as much for men as for women. Alternatively, education appears to be the primary driver of agreement that employers should give priority to nationals over immigrants When jobs are scarce (Figure 2), where those with higher educations are more likely to disagree.
