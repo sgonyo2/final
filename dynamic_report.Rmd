@@ -1,0 +1,115 @@
+---
+title: "EVS Dynamic Report"
+author: "Sarah Gonyo"
+date: "2023-05-03"
+output: html_document
+params:
+  country: AL
+  outcome: job_priority
+  control: NA
+  age_poly: 1
+---
+
+```{r, include = FALSE}
+library(dplyr)
+library(tidyverse)
+library(texreg) #regression tables
+library(stringr)
+
+#Import data
+data_country <- if (params$country == "Overall"){
+  data_subset
+} else{
+  data_subset %>%
+    filter(country == params$country)
+}
+```
+# Overview
+
+The purpose of this project is to create an interactive [shiny app](https://www.shinyapps.io/admin/#/application/9020621) to understand attitudes towards gender roles and immigration using data from the European Value Study (EVS) from 2017. The EVS is a large-scale, cross-national and longitudinal survey research on how Europeans think about family, work, religion, politics, and society.   Visit [European Value Study](https://search.gesis.org/research_data/ZA7500#variables|exploredata-ZA7500_Varv80|0|variable_order|asc|v80) for more information.
+
+The two variables of interest are agreement with the following statements:
+
+ * When a mother works for pay, the children suffer
+ * When jobs are scarce, employers should give priority to [NATIONALITY] people over immigrants
+ 
+Two tabs are shown in the app. The first tab shows graphs exploring the relationship between the selected outcome variable and three controls: age, education, and sex. The second tab shows the coefficients and residuals plot of a regression analysis between the selected outcome variable and selected control variables.
+
+Four inputs are required to use this app. First, select a country from the drop-down menu below. Next, select between two outcome variables. Then, select sex and/or education as your control variables (age is included by default). Finally, select the number of age polynomials you would like to include in the regression (e.g., selecting 3 includes age, age^2, and age^3).
+ 
+# Main Findings
+
+Figure 1 shows the relationship between the selected variable of interest and age, education, and sex.
+```{r, warning = FALSE, echo = FALSE}
+#Figures
+if (params$outcome == "child_suffer") {
+  data_country %>%
+    ggplot(aes(
+      x = age,
+      y = child_suffer,
+      color = as.factor(education)
+    )) +
+    geom_line(stat = "summary", fun = "mean") +
+    labs(color = "Education", x = "Age", y = "When a mother works for pay, the children suffer") +
+    facet_wrap(~ male,
+               ncol = 1,
+               labeller = label_value) +
+    ggtitle(paste0(params$country, " Results"))
+  
+} else{
+  data_country %>%
+    ggplot(aes(
+      x = age,
+      y = job_priority,
+      color = as.factor(education)
+    )) +
+    geom_line(stat = "summary", fun = "mean") +
+    labs(color = "Education", x = "Age", y = "Employment priority to nationals over immigrants") +
+    facet_wrap(~ male,
+               ncol = 1,
+               labeller = label_value) +
+    ggtitle(paste0(params$country, " Results"))
+}
+```
+
+
+
+```{r, include = FALSE}
+#Regression
+model <-
+  
+  if (params$control == "NA") {
+    lm(
+      formula = str_c(params$outcome, " ~ " , "poly(age, ", params$age_poly, ")"),
+      data = data_country
+    )
+  } else {
+    lm(
+      formula = str_c(params$outcome, " ~ " ,
+                      str_c(c(params$control, "+"), collapse = " + "),
+        
+        "poly(age, ", 1,")"),
+      data = data_country
+    )
+  }
+```
+The regression model below explains the effects of selected inputs on the selected variable of interest.
+ 
+```{r, echo = FALSE, message=FALSE, results='asis'}
+htmlreg(model, booktabs = TRUE, dcolumn = TRUE, caption = "Regression Results")
+```
+
+Finally, the figure below shows a scatterplot of the predicted versus the residuals from the regression. 
+```{r, warning = FALSE, echo = FALSE}
+#Residuals plot
+ggplot(model, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs(x = "Residuals", y = "Predicted") +
+  ggtitle(paste0(params$country, " Predicted vs Residuals Plot")
+  )
+```
+
+
+
+
